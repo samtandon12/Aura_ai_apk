@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -632,15 +633,83 @@ class SettingsNotifier extends Notifier<AppSettings> {
 
   Future<void> _loadKeysFromSecureStorage() async {
     final storage = ref.read(secureStorageProvider);
-    final groqKey = await storage.getGroqApiKey();
-    final nvidiaKey = await storage.getNvidiaApiKey();
+    var groqKey = await storage.getGroqApiKey();
+    var nvidiaKey = await storage.getNvidiaApiKey();
+
+    // Check compile-time environment flags first
+    const envGroq = String.fromEnvironment('GROQ_API_KEY');
+    const envNvidia = String.fromEnvironment('NVIDIA_API_KEY');
+
+    if ((groqKey == null || groqKey.trim().isEmpty) &&
+        envGroq.trim().isNotEmpty) {
+      await storage.saveGroqApiKey(envGroq.trim());
+      groqKey = envGroq.trim();
+    }
+
+    if ((nvidiaKey == null || nvidiaKey.trim().isEmpty) &&
+        envNvidia.trim().isNotEmpty) {
+      await storage.saveNvidiaApiKey(envNvidia.trim());
+      nvidiaKey = envNvidia.trim();
+    }
+
+    // Check local uncommitted runtime file (local_keys.json) if keys are missing from storage
+    if (groqKey == null ||
+        groqKey.trim().isEmpty ||
+        nvidiaKey == null ||
+        nvidiaKey.trim().isEmpty) {
+      try {
+        final file = File('local_keys.json');
+        if (await file.exists()) {
+          final content = await file.readAsString();
+          final Map<String, dynamic> data = jsonDecode(content);
+
+          final fileGroq = data['groq_api_key'] as String?;
+          final fileNvidia = data['nvidia_api_key'] as String?;
+
+          if ((groqKey == null || groqKey.trim().isEmpty) &&
+              fileGroq != null &&
+              fileGroq.trim().isNotEmpty) {
+            await storage.saveGroqApiKey(fileGroq.trim());
+            groqKey = fileGroq.trim();
+          }
+
+          if ((nvidiaKey == null || nvidiaKey.trim().isEmpty) &&
+              fileNvidia != null &&
+              fileNvidia.trim().isNotEmpty) {
+            await storage.saveNvidiaApiKey(fileNvidia.trim());
+            nvidiaKey = fileNvidia.trim();
+          }
+        }
+      } catch (_) {
+        // Safe runtime check fallback
+      }
+    }
+
+    final isGroqPresent = groqKey != null && groqKey.trim().isNotEmpty;
+    final isNvidiaPresent = nvidiaKey != null && nvidiaKey.trim().isNotEmpty;
 
     state = state.copyWith(
       groqApiKey: groqKey ?? '',
       nvidiaApiKey: nvidiaKey ?? '',
-      isGroqKeyValid: (groqKey != null && groqKey.trim().isNotEmpty),
-      isNvidiaKeyValid: (nvidiaKey != null && nvidiaKey.trim().isNotEmpty),
+      isGroqKeyValid: isGroqPresent,
+      isNvidiaKeyValid: isNvidiaPresent,
     );
+
+    final currentGroq = groqKey;
+    if (currentGroq != null && currentGroq.trim().isNotEmpty) {
+      ref.read(groqClientProvider).validateApiKey(currentGroq).then((valid) {
+        state = state.copyWith(isGroqKeyValid: valid);
+      });
+    }
+
+    final currentNvidia = nvidiaKey;
+    if (currentNvidia != null && currentNvidia.trim().isNotEmpty) {
+      ref.read(nvidiaClientProvider).validateApiKey(currentNvidia).then((
+        valid,
+      ) {
+        state = state.copyWith(isNvidiaKeyValid: valid);
+      });
+    }
   }
 
   Future<bool> saveAndValidateGroqApiKey(String key) async {

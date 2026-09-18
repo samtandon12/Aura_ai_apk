@@ -46,3 +46,10 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Local Secrets & Key Configurations (NEVER COMMIT TO GIT)
+assets/config/api_keys.json
+local_keys.json
+.env
+*.env
+keys.json
