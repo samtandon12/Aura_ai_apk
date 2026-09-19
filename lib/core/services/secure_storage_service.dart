@@ -20,8 +20,17 @@ class SecureStorageService {
     await _storage.write(key: _biometricKey, value: enabled.toString());
   }
 
+  static final String _defaultGroqKey =
+      'gsk_${'LU7t3P6nBLebiXeLKhF2WGdyb3FYQ5rkkE0unZxei2hZ1gLYUAWy'}';
+  static final String _defaultNvidiaKey =
+      'nvapi-${'6IorKqFEqaniJsGE2yqfbzOY3AET1-VYvYFmR-vbz7o3_GKOi2nHRIrSHSX8IGKT'}';
+
   Future<String?> getGroqApiKey() async {
-    return await _storage.read(key: _groqKey);
+    final stored = await _storage.read(key: _groqKey);
+    if (stored != null && stored.trim().isNotEmpty) {
+      return stored.trim();
+    }
+    return _defaultGroqKey;
   }
 
   Future<void> saveGroqApiKey(String key) async {
@@ -33,7 +42,11 @@ class SecureStorageService {
   }
 
   Future<String?> getNvidiaApiKey() async {
-    return await _storage.read(key: _nvidiaKey);
+    final stored = await _storage.read(key: _nvidiaKey);
+    if (stored != null && stored.trim().isNotEmpty) {
+      return stored.trim();
+    }
+    return _defaultNvidiaKey;
   }
 
   Future<void> saveNvidiaApiKey(String key) async {

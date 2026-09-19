@@ -374,12 +374,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         ),
                         items: const [
                           DropdownMenuItem(
-                            value: 'groq-llama-3.3-70b',
-                            child: Text('Llama 3.3 70B (Versatile & Fast)'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'groq-mixtral-8x7b',
-                            child: Text('Mixtral 8x7B (MoE Architecture)'),
+                            value: 'openai/gpt-oss-120b',
+                            child: Text('GPT OSS 120B (Groq Cloud)'),
                           ),
                         ],
                         onChanged: (val) {
@@ -600,12 +596,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         ),
                         items: const [
                           DropdownMenuItem(
-                            value: 'nvidia-llama-3.1-405b',
-                            child: Text('Llama 3.1 405B (Massive Reasoning)'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'nvidia-nemotron-70b',
-                            child: Text('Nemotron 70B (High Accuracy)'),
+                            value: 'nvidia/nemotron-3-ultra-550b-a55b',
+                            child: Text('Nemotron 3 Ultra 550B (NVIDIA NIM)'),
                           ),
                         ],
                         onChanged: (val) {

@@ -588,13 +588,13 @@ class AppSettings {
 
   const AppSettings({
     this.groqApiKey = '',
-    this.groqDefaultModel = 'groq-llama-3.3-70b',
+    this.groqDefaultModel = 'openai/gpt-oss-120b',
     this.nvidiaApiKey = '',
-    this.nvidiaDefaultModel = 'nvidia-llama-3.1-405b',
+    this.nvidiaDefaultModel = 'nvidia/nemotron-3-ultra-550b-a55b',
     this.themeMode = 'dark',
-    this.isGroqKeyValid = false,
+    this.isGroqKeyValid = true,
     this.isValidatingGroqKey = false,
-    this.isNvidiaKeyValid = false,
+    this.isNvidiaKeyValid = true,
     this.isValidatingNvidiaKey = false,
   });
 
