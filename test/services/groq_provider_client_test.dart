@@ -54,7 +54,7 @@ void main() {
       final chunks = await client
           .streamChatCompletion(
             apiKey: 'gsk_valid_key',
-            modelId: 'groq-llama-3.3-70b',
+            modelId: 'openai/gpt-oss-120b',
             history: const [],
             prompt: 'Hi',
             client: mockHttpClient,
@@ -76,7 +76,7 @@ void main() {
         () => client
             .streamChatCompletion(
               apiKey: 'bad_key',
-              modelId: 'groq-llama-3.3-70b',
+              modelId: 'openai/gpt-oss-120b',
               history: const [],
               prompt: 'Hi',
               client: mockHttpClient,
@@ -98,7 +98,7 @@ void main() {
         () => client
             .streamChatCompletion(
               apiKey: 'valid_key',
-              modelId: 'groq-llama-3.3-70b',
+              modelId: 'openai/gpt-oss-120b',
               history: const [],
               prompt: 'Hi',
               client: mockHttpClient,

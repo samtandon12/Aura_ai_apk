@@ -54,7 +54,7 @@ void main() {
       final chunks = await client
           .streamChatCompletion(
             apiKey: 'nvapi-valid-key',
-            modelId: 'nvidia-llama-3.1-405b',
+            modelId: 'nvidia/nemotron-3-ultra-550b-a55b',
             history: const [],
             prompt: 'Hi',
             client: mockHttpClient,
@@ -76,7 +76,7 @@ void main() {
         () => client
             .streamChatCompletion(
               apiKey: 'nvapi-bad-key',
-              modelId: 'nvidia-llama-3.1-405b',
+              modelId: 'nvidia/nemotron-3-ultra-550b-a55b',
               history: const [],
               prompt: 'Hi',
               client: mockHttpClient,
@@ -98,7 +98,7 @@ void main() {
         () => client
             .streamChatCompletion(
               apiKey: 'nvapi-valid-key',
-              modelId: 'nvidia-llama-3.1-405b',
+              modelId: 'nvidia/nemotron-3-ultra-550b-a55b',
               history: const [],
               prompt: 'Hi',
               client: mockHttpClient,

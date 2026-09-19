@@ -15,12 +15,10 @@ class GroqProviderClient implements LLMProviderClient {
 
   // Map internal model IDs to Groq endpoint model names
   String _mapModelId(String modelId) {
-    if (modelId.contains('mixtral')) {
-      return 'mixtral-8x7b-32768';
-    } else if (modelId.contains('8b')) {
-      return 'llama-3.1-8b-instant';
+    if (modelId.contains('gpt-oss') || modelId.contains('compound')) {
+      return modelId;
     }
-    return 'llama-3.3-70b-versatile';
+    return 'openai/gpt-oss-120b';
   }
 
   @override
@@ -38,7 +36,7 @@ class GroqProviderClient implements LLMProviderClient {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
-          'model': 'llama-3.3-70b-versatile',
+          'model': 'openai/gpt-oss-120b',
           'messages': [
             {'role': 'user', 'content': 'Test key'},
           ],
@@ -145,8 +143,14 @@ class GroqProviderClient implements LLMProviderClient {
         if (choices != null && choices.isNotEmpty) {
           final delta = choices.first['delta'] as Map<String, dynamic>?;
           final contentChunk = delta?['content'] as String?;
+          final reasoningChunk =
+              delta?['reasoning_content'] as String? ??
+              delta?['reasoning'] as String?;
+
           if (contentChunk != null && contentChunk.isNotEmpty) {
             yield contentChunk;
+          } else if (reasoningChunk != null && reasoningChunk.isNotEmpty) {
+            yield reasoningChunk;
           }
         }
       } catch (_) {

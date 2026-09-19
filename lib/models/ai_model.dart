@@ -30,59 +30,22 @@ class AIModel {
 
   static const List<AIModel> availableModels = [
     AIModel(
-      id: 'groq-llama-3.3-70b',
-      name: 'Groq — Llama 3.3 70B',
+      id: 'openai/gpt-oss-120b',
+      name: 'Groq — GPT OSS 120B',
       provider: AIProvider.groq,
-      description:
-          'Ultra-fast LPU inference with state-of-the-art general intelligence',
+      description: 'Ultra-fast LPU inference with 120B open architecture model on Groq Cloud',
       badgeLabel: 'Ultra-Fast',
       badgeColor: AppColors.groqBrand,
       isPopular: true,
     ),
     AIModel(
-      id: 'nvidia-llama-3.1-405b',
-      name: 'NVIDIA — Llama 3.1 405B',
+      id: 'nvidia/nemotron-3-ultra-550b-a55b',
+      name: 'NVIDIA — Nemotron 3 Ultra 550B',
       provider: AIProvider.nvidia,
-      description: 'Massive parameter open weights model hosted on NVIDIA NIM cloud infrastructure',
+      description: 'Massive 550B parameter deep reasoning model hosted on NVIDIA NIM cloud infrastructure',
       badgeLabel: 'Deep Reasoning',
       badgeColor: AppColors.nvidiaBrand,
       isPopular: true,
-    ),
-    AIModel(
-      id: 'groq-llama-3.2-11b-vision',
-      name: 'Groq — Llama 3.2 11B Vision',
-      provider: AIProvider.groq,
-      description:
-          'Multimodal vision model for analyzing images, mockups, and charts',
-      badgeLabel: 'Vision Capable',
-      badgeColor: AppColors.groqBrand,
-      supportsVision: true,
-    ),
-    AIModel(
-      id: 'nvidia-llama-3.2-11b-vision',
-      name: 'NVIDIA — Llama 3.2 11B Vision',
-      provider: AIProvider.nvidia,
-      description:
-          'High performance multimodal model hosted on NVIDIA NIM cloud',
-      badgeLabel: 'Vision Capable',
-      badgeColor: AppColors.nvidiaBrand,
-      supportsVision: true,
-    ),
-    AIModel(
-      id: 'groq-mixtral-8x7b',
-      name: 'Groq — Mixtral 8x7B',
-      provider: AIProvider.groq,
-      description: 'High performance Mixture-of-Experts model for coding and multilingual tasks',
-      badgeLabel: 'MoE Architecture',
-      badgeColor: AppColors.groqBrand,
-    ),
-    AIModel(
-      id: 'nvidia-nemotron-70b',
-      name: 'NVIDIA — Nemotron 70B',
-      provider: AIProvider.nvidia,
-      description: 'Custom fine-tuned Llama model optimized for high accuracy & helpfulness',
-      badgeLabel: 'High Accuracy',
-      badgeColor: AppColors.nvidiaBrand,
     ),
   ];
 

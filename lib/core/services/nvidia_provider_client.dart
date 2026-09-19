@@ -16,11 +16,9 @@ class NvidiaNimProviderClient implements LLMProviderClient {
   // Map internal model IDs to NVIDIA NIM endpoint model names
   String _mapModelId(String modelId) {
     if (modelId.contains('nemotron')) {
-      return 'nvidia/llama-3.1-nemotron-70b-instruct';
-    } else if (modelId.contains('405b')) {
-      return 'meta/llama-3.1-405b-instruct';
+      return 'nvidia/nemotron-3-ultra-550b-a55b';
     }
-    return 'meta/llama-3.3-70b-instruct';
+    return 'nvidia/nemotron-3-ultra-550b-a55b';
   }
 
   @override
@@ -38,7 +36,7 @@ class NvidiaNimProviderClient implements LLMProviderClient {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
-          'model': 'meta/llama-3.1-405b-instruct',
+          'model': 'nvidia/nemotron-3-ultra-550b-a55b',
           'messages': [
             {'role': 'user', 'content': 'Test key'},
           ],
@@ -148,8 +146,14 @@ class NvidiaNimProviderClient implements LLMProviderClient {
         if (choices != null && choices.isNotEmpty) {
           final delta = choices.first['delta'] as Map<String, dynamic>?;
           final contentChunk = delta?['content'] as String?;
+          final reasoningChunk =
+              delta?['reasoning_content'] as String? ??
+              delta?['reasoning'] as String?;
+
           if (contentChunk != null && contentChunk.isNotEmpty) {
             yield contentChunk;
+          } else if (reasoningChunk != null && reasoningChunk.isNotEmpty) {
+            yield reasoningChunk;
           }
         }
       } catch (_) {
